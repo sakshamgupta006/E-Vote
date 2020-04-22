@@ -123,13 +123,14 @@ window.registerToVote = function() {
 
                 $("#idnum").val("")
                 $("#email").val("")
-
+                $("input[name=permreq]:checked").val(0)
                 contract.registerVoter(email, idNumber, domain, permreq, {
                     gas: 2500000,
                     from: web3.eth.accounts[0]
                 }).then(function() {
                     //$("#msg2").html("Account ready to vote!")
-                    window.alert("Account ready to vote!")
+                    var privatekey = Math.floor((Math.random()*100000000) + 1)
+                    window.alert("Your Private Key: "+ privatekey + ". Keep it safe!!")
                     /*var t1 = performance.now()
                     window.alert('It took' + (t1 - t0) + 'ms to finish')*/
                 })
@@ -203,6 +204,7 @@ window.voteForCandidate = function(candidate) {
                                         $("#msg").html("Your vote attempt has been submitted. Please wait for verification.")
                                         $("#candidate").val("")
                                         $("#e-mail").val("")
+                                        $("#private-key").val("")
 
                                         contract.candidateList.call(ballotID).then(function(candidateArray) {
                                             for (let i = 0; i < candidateArray.length; i++) {
@@ -337,12 +339,14 @@ window.ballotSetup = function() {
                         let title = $("#vtitle").val()
                         let choices = $("#choices").val()
                         var choicesArray = choices.split(/\s*,\s*/)
-                        let votelimit = $("#votelimit").val()
-                        let whitelist = $("input[name=whitelist]:checked").val()
+                        let votelimit = 100
+                        //let votelimit = $("#votelimit").val()
+                        let whitelist = 0
+                        // let whitelist = $("input[name=whitelist]:checked").val()
                         let whitelisted = $("#whitelisted").val()
-                        var whitelistedArray = whitelisted.split(/\s*,\s*/)
+                        var whitelistedArray = ""//whitelisted.split(/\s*,\s*/)
                         let ballotid = Math.floor(Math.random() * 4294967295)
-
+                        //window.alert(whitelistedArray)
                         Creator.deployed().then(function(contract) {
                             contract.createBallot(enddate, ballottype, votelimit, ballotid, title, whitelist, {
                                 gas: 2500000,
